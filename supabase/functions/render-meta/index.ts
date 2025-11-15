@@ -45,24 +45,30 @@ Deno.serve(async (req) => {
     let description = 'Portal de conteúdos sobre saúde, bem-estar, beleza, tratamentos, autocuidado e receitas saudáveis. Cuide do seu corpo e mente com Angonurse.';
     let image = 'https://angonurse.vercel.app/angonurse-site.png';
     let canonical = `https://angonurse.vercel.app${path}`;
+    let imageAlt = 'Imagem do artigo - Angonurse';
 
     // Detectar se é uma página de artigo
     const articleMatch = path.match(/^\/artigo\/([^\/]+)/);
     if (articleMatch) {
       const slug = articleMatch[1];
       
-      const { data: article } = await supabase
+      const { data: article, error: articleError } = await supabase
         .from('articles')
         .select('*')
         .eq('slug', slug)
         .eq('published', true)
-        .single();
+        .maybeSingle();
+
+      if (articleError) {
+        console.error('render-meta: error fetching article', articleError.message);
+      }
 
       if (article) {
         const typedArticle = article as Article;
-        title = `${typedArticle.title_pt} | Angonurse`;
+        title = `${typedArticle.title_pt}`;
         description = typedArticle.excerpt_pt || typedArticle.content_pt?.substring(0, 160) || description;
         image = typedArticle.featured_image || image;
+        imageAlt = typedArticle.title_pt || imageAlt;
       }
     }
 
@@ -94,23 +100,25 @@ Deno.serve(async (req) => {
   <meta property="og:description" content="${safeDescription}">
   <meta property="og:type" content="${articleMatch ? 'article' : 'website'}">
   <meta property="og:url" content="${canonical}">
-  <meta property="og:image" content="${image}">
-  <meta property="og:image:secure_url" content="${image}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:site_name" content="Angonurse">
-  <meta property="og:locale" content="pt_PT">
+   <meta property="og:image" content="${image}">
+   <meta property="og:image:secure_url" content="${image}">
+   <meta property="og:image:width" content="1200">
+   <meta property="og:image:height" content="630">
+   <meta property="og:image:alt" content="${escapeHtml(imageAlt)}">
+   <meta property="og:site_name" content="Angonurse">
+   <meta property="og:locale" content="pt_PT">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${safeTitle}">
   <meta name="twitter:description" content="${safeDescription}">
   <meta name="twitter:image" content="${image}">
+  <meta name="twitter:image:alt" content="${escapeHtml(imageAlt)}">
   
   <!-- Robots -->
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   
-  <meta http-equiv="refresh" content="0;url=${canonical}">
+  
 </head>
 <body>
   <h1>${safeTitle}</h1>
@@ -123,6 +131,7 @@ Deno.serve(async (req) => {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
     });
   } catch (error) {
