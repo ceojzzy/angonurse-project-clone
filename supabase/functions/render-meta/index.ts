@@ -100,13 +100,13 @@ Deno.serve(async (req) => {
   <meta property="og:description" content="${safeDescription}">
   <meta property="og:type" content="${articleMatch ? 'article' : 'website'}">
   <meta property="og:url" content="${canonical}">
-   <meta property="og:image" content="${image}">
-   <meta property="og:image:secure_url" content="${image}">
-   <meta property="og:image:width" content="1200">
-   <meta property="og:image:height" content="630">
-   <meta property="og:image:alt" content="${escapeHtml(imageAlt)}">
-   <meta property="og:site_name" content="Angonurse">
-   <meta property="og:locale" content="pt_PT">
+  <meta property="og:image" content="${image}">
+  <meta property="og:image:secure_url" content="${image}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="${escapeHtml(imageAlt)}">
+  <meta property="og:site_name" content="Angonurse">
+  <meta property="og:locale" content="pt_PT">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -118,12 +118,30 @@ Deno.serve(async (req) => {
   <!-- Robots -->
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 { color: #10b981; }
+    .loading { text-align: center; color: #6b7280; }
+  </style>
   
+  <script>
+    // Apenas crawlers verão este HTML, usuários normais já veem a SPA via api/ssr.ts
+    // Se um usuário chegar aqui por acidente, mostrar conteúdo básico
+  </script>
 </head>
 <body>
   <h1>${safeTitle}</h1>
   <p>${safeDescription}</p>
-  <p>Redirecionando para <a href="${canonical}">${canonical}</a></p>
+  <div class="loading">
+    <p>📄 Esta é uma versão otimizada para compartilhamento em redes sociais.</p>
+    <p>Para a experiência completa, visite: <a href="${canonical}">${canonical}</a></p>
+  </div>
 </body>
 </html>`;
 
@@ -131,7 +149,7 @@ Deno.serve(async (req) => {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
       },
     });
   } catch (error) {
