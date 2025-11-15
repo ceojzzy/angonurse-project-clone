@@ -46,7 +46,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     
     const html = await response.text();
-    return res.status(200).setHeader('Content-Type', 'text/html; charset=utf-8').send(html);
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    return res.status(200).send(html);
   } catch (error) {
     console.error('Error calling render-meta:', error);
     // Fallback para index.html básico
