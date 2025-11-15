@@ -66,29 +66,45 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Escapar strings para HTML
+    const escapeHtml = (text: string) => {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    };
+
+    const safeTitle = escapeHtml(title);
+    const safeDescription = escapeHtml(description);
+
     // Gerar HTML estático com meta tags
-    const html = `
-<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
-  <meta name="description" content="${description}">
+  <title>${safeTitle}</title>
+  <meta name="description" content="${safeDescription}">
   <link rel="canonical" href="${canonical}">
   
   <!-- Open Graph -->
-  <meta property="og:title" content="${title}">
-  <meta property="og:description" content="${description}">
-  <meta property="og:type" content="website">
+  <meta property="og:title" content="${safeTitle}">
+  <meta property="og:description" content="${safeDescription}">
+  <meta property="og:type" content="${articleMatch ? 'article' : 'website'}">
   <meta property="og:url" content="${canonical}">
   <meta property="og:image" content="${image}">
+  <meta property="og:image:secure_url" content="${image}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="Angonurse">
+  <meta property="og:locale" content="pt_PT">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${title}">
-  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:title" content="${safeTitle}">
+  <meta name="twitter:description" content="${safeDescription}">
   <meta name="twitter:image" content="${image}">
   
   <!-- Robots -->
@@ -97,12 +113,11 @@ Deno.serve(async (req) => {
   <meta http-equiv="refresh" content="0;url=${canonical}">
 </head>
 <body>
-  <h1>${title}</h1>
-  <p>${description}</p>
+  <h1>${safeTitle}</h1>
+  <p>${safeDescription}</p>
   <p>Redirecionando para <a href="${canonical}">${canonical}</a></p>
 </body>
-</html>
-    `;
+</html>`;
 
     return new Response(html, {
       headers: {

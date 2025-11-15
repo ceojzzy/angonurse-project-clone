@@ -34,15 +34,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   
   // Se for crawler, chamar Edge Function do Supabase
   try {
-    const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://fudkxjayttzpgizgtram.supabase.co';
+    const supabaseUrl = 'https://fudkxjayttzpgizgtram.supabase.co';
     const response = await fetch(`${supabaseUrl}/functions/v1/render-meta?path=${encodeURIComponent(path)}`, {
       headers: {
         'user-agent': userAgent,
       },
     });
     
+    if (!response.ok) {
+      throw new Error(`Edge function returned ${response.status}`);
+    }
+    
     const html = await response.text();
-    return res.status(200).setHeader('Content-Type', 'text/html').send(html);
+    return res.status(200).setHeader('Content-Type', 'text/html; charset=utf-8').send(html);
   } catch (error) {
     console.error('Error calling render-meta:', error);
     // Fallback para index.html básico
