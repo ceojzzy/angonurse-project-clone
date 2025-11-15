@@ -57,6 +57,16 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        health: {
+          green: "hsl(var(--health-green))",
+          light: "hsl(var(--health-light))",
+        },
+        wellness: {
+          blue: "hsl(var(--wellness-blue))",
+        },
+        beauty: {
+          pink: "hsl(var(--beauty-pink))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
