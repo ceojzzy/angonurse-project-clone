@@ -1,22 +1,4 @@
 {
-  "rewrites": [
-    {
-      "source": "/artigo/:slug",
-      "destination": "/api/ssr"
-    },
-    {
-      "source": "/categoria/:category",
-      "destination": "/api/ssr"
-    },
-    {
-      "source": "/",
-      "destination": "/api/ssr"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
