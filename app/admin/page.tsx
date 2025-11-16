@@ -6,9 +6,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import ArticleManager from "@/components/admin/ArticleManager";
-import HeroSlideManager from "@/components/admin/HeroSlideManager";
-import PageContentManager from "@/components/admin/PageContentManager";
+import { ArticleManager } from "@/components/admin/ArticleManager";
+import { HeroSlideManager } from "@/components/admin/HeroSlideManager";
+import { PageContentManager } from "@/components/admin/PageContentManager";
 
 export default function AdminPage() {
   const { user, loading, signOut } = useAuth();

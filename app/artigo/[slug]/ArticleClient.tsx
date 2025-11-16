@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { ptBR, enUS } from "date-fns/locale";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import RichContent from "@/components/RichContent";
+import { RichContent } from "@/components/RichContent";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
