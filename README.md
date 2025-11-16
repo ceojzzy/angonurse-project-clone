@@ -1,73 +1,173 @@
-# Welcome to your Lovable project
+# Angonurse - Portal de Saúde, Bem-estar e Beleza
 
-## Project info
+Portal de conteúdos sobre saúde, bem-estar e beleza, construído com **Next.js 15**, **Supabase** e **Tailwind CSS**.
 
-**URL**: https://lovable.dev/projects/f6d80e70-fd36-43ee-a377-a2f2dba67519
+## 🚀 Tecnologias
 
-## How can I edit this code?
+- **Next.js 15** - Framework React com SSR (Server-Side Rendering)
+- **Supabase** - Backend completo (Database, Auth, Storage)
+- **Tailwind CSS** - Estilização
+- **TypeScript** - Tipagem estática
+- **Shadcn/ui** - Componentes UI modernos
 
-There are several ways of editing your application.
+## ✨ Funcionalidades
 
-**Use Lovable**
+- ✅ **SSR nativo** para OG tags dinâmicas (funciona perfeitamente em redes sociais)
+- ✅ Sistema de artigos com CMS admin
+- ✅ Categorias (Saúde, Bem-estar, Beleza)
+- ✅ Hero carousel customizável
+- ✅ Newsletter
+- ✅ Busca de artigos
+- ✅ Autenticação de admin
+- ✅ Multilíngue (Português/Inglês)
+- ✅ SEO otimizado
+- ✅ Design responsivo
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f6d80e70-fd36-43ee-a377-a2f2dba67519) and start prompting.
+## 🎯 OG Tags Dinâmicas (Diferencial!)
 
-Changes made via Lovable will be committed automatically to this repo.
+Este projeto usa **Next.js com SSR** para gerar HTML completo no servidor. Isso significa que crawlers de redes sociais (Facebook, WhatsApp, Twitter, LinkedIn) conseguem ver as meta tags corretamente - **exatamente como funciona no Blogger**!
 
-**Use your preferred IDE**
+### Como funciona:
+```typescript
+// app/artigo/[slug]/page.tsx
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const article = await getArticle(params.slug);
+  
+  return {
+    title: article.title_pt,
+    description: article.excerpt_pt,
+    openGraph: {
+      title: article.title_pt,
+      images: [article.featured_image],
+      type: 'article',
+    },
+  };
+}
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 📦 Instalação Local
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
+# 1. Clonar repositório
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# 2. Instalar dependências
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 3. Configurar variáveis de ambiente
+cp .env.example .env.local
+
+# Edite .env.local com suas credenciais do Supabase:
+# NEXT_PUBLIC_SUPABASE_URL=sua-url
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-key
+
+# 4. Rodar em desenvolvimento
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Acesse http://localhost:3000
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🚀 Deploy na Vercel
 
-**Use GitHub Codespaces**
+### Opção 1: Via Lovable (Mais Fácil)
+1. Abra o projeto no [Lovable](https://lovable.dev/projects/f6d80e70-fd36-43ee-a377-a2f2dba67519)
+2. Clique em Share → Publish
+3. Pronto!
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Opção 2: Deploy Manual na Vercel
+1. Push do código para GitHub
+2. Acesse [vercel.com](https://vercel.com) e faça login
+3. Clique em "Import Project"
+4. Selecione seu repositório
+5. Configure as variáveis de ambiente:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+6. Deploy!
 
-## What technologies are used for this project?
+📖 **Veja instruções detalhadas em:** [`DEPLOY-VERCEL.md`](./DEPLOY-VERCEL.md)
 
-This project is built with:
+## 📁 Estrutura do Projeto
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+angonurse/
+├── app/                      # Next.js App Router (SSR)
+│   ├── artigo/[slug]/       # Páginas de artigo com metadata dinâmica
+│   ├── categoria/[cat]/     # Páginas de categoria
+│   ├── admin/               # Dashboard admin
+│   ├── auth/                # Login
+│   ├── layout.tsx           # Layout principal
+│   └── ...                  # Outras páginas
+├── components/              # Componentes React
+│   ├── ui/                  # Shadcn UI components
+│   └── admin/               # Componentes do CMS
+├── contexts/                # React Contexts (Auth, Language)
+├── integrations/            # Supabase client
+├── hooks/                   # Custom hooks
+├── lib/                     # Funções utilitárias
+├── src/                     # Assets e estilos
+└── public/                  # Imagens e assets estáticos
+```
 
-## How can I deploy this project?
+## 🧪 Testar OG Tags Após Deploy
 
-Simply open [Lovable](https://lovable.dev/projects/f6d80e70-fd36-43ee-a377-a2f2dba67519) and click on Share -> Publish.
+Depois do deploy, teste as meta tags dinâmicas:
 
-## Can I connect a custom domain to my Lovable project?
+- **Facebook:** [Facebook Debugger](https://developers.facebook.com/tools/debug/)
+- **Twitter:** [Twitter Card Validator](https://cards-dev.twitter.com/validator)
+- **LinkedIn:** [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)
+- **WhatsApp:** Envie um link e veja o preview
 
-Yes, you can!
+## 🎨 Customização
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Design System
+Edite `src/index.css` para customizar cores:
+```css
+:root {
+  --primary: 142 76% 36%;    /* Verde principal */
+  --secondary: 350 89% 60%;  /* Rosa secundário */
+  /* ... */
+}
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Componentes
+Todos os componentes usam o design system e Shadcn/ui. Customize em `components/`
+
+## 📝 Painel Admin
+
+Acesse `/admin` para gerenciar:
+- **Artigos**: Criar, editar, publicar artigos
+- **Hero Slides**: Gerenciar carousel da homepage
+- **Páginas**: Editar conteúdo de páginas estáticas
+
+**Login:** `/auth`
+
+## 🆚 Antes vs Depois (SPA → SSR)
+
+### ❌ Antes (Vite SPA)
+- OG tags só carregavam depois do JavaScript
+- Crawlers não viam meta tags dinâmicas
+- Preview quebrado em redes sociais
+
+### ✅ Agora (Next.js SSR)
+- HTML completo gerado no servidor
+- OG tags presentes desde o primeiro byte
+- Crawlers veem tudo perfeitamente
+- Preview bonito em todas as redes sociais
+
+## 📚 Documentação
+
+- [Migração Next.js](./MIGRACAO-NEXTJS.md) - Detalhes da migração
+- [Deploy Vercel](./DEPLOY-VERCEL.md) - Guia completo de deploy
+- [Next.js Docs](https://nextjs.org/docs)
+- [Supabase Docs](https://supabase.com/docs)
+- [Lovable Docs](https://docs.lovable.dev)
+
+## 🔗 Links Úteis
+
+- **Projeto Lovable:** https://lovable.dev/projects/f6d80e70-fd36-43ee-a377-a2f2dba67519
+- **Site:** https://angonurse.vercel.app
+
+## 📄 Licença
+
+© 2025 Angonurse. Todos os direitos reservados.
