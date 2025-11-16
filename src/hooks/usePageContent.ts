@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export interface PageContent {
@@ -22,6 +22,7 @@ export const usePageContent = (pageKey: string) => {
 
   const loadContent = async () => {
     try {
+      const supabase = createClient();
       const { data, error } = await supabase
         .from('page_contents')
         .select('*')
