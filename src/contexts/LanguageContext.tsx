@@ -15,12 +15,18 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const LANGUAGE_STORAGE_KEY = "angonurse_language";
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    return (savedLanguage === "en" || savedLanguage === "pt") ? savedLanguage : "pt";
-  });
+  const [language, setLanguage] = useState<Language>("pt");
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    if (savedLanguage === "en" || savedLanguage === "pt") {
+      setLanguage(savedLanguage);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
   }, [language]);
 
