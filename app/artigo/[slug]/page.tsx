@@ -39,6 +39,19 @@ async function getArticle(slug: string) {
   return article as Article;
 }
 
+export async function generateStaticParams() {
+  const supabase = createClient();
+  
+  const { data: articles } = await supabase
+    .from('articles')
+    .select('slug')
+    .eq('published', true);
+
+  return articles?.map((article) => ({
+    slug: article.slug,
+  })) || [];
+}
+
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const article = await getArticle(params.slug);
 
