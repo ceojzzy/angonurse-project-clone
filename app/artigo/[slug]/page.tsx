@@ -39,23 +39,9 @@ async function getArticle(slug: string) {
   return article as Article;
 }
 
-// Enable dynamic params for articles created after build
-export const dynamicParams = true;
+// Force dynamic rendering for all article pages
 export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Disable caching
-
-export async function generateStaticParams() {
-  const supabase = createClient();
-  
-  const { data: articles } = await supabase
-    .from('articles')
-    .select('slug')
-    .eq('published', true);
-
-  return articles?.map((article) => ({
-    slug: article.slug,
-  })) || [];
-}
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const article = await getArticle(params.slug);
