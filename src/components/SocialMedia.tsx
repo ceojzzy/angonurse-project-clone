@@ -1,3 +1,5 @@
+"use client";
+
 import { Facebook, Youtube, Linkedin, Twitter, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
