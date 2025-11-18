@@ -39,6 +39,10 @@ async function getArticle(slug: string) {
   return article as Article;
 }
 
+// Enable dynamic params for articles created after build
+export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
+
 export async function generateStaticParams() {
   const supabase = createClient();
   
