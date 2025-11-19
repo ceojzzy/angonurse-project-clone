@@ -25,6 +25,8 @@ interface Article {
 async function getArticle(slug: string) {
   const supabase = createClient();
   
+  console.log('[getArticle] Buscando artigo com slug:', slug);
+  
   const { data: article, error } = await supabase
     .from('articles')
     .select('*')
@@ -32,10 +34,19 @@ async function getArticle(slug: string) {
     .eq('published', true)
     .maybeSingle();
 
-  if (error || !article) {
+  console.log('[getArticle] Resultado:', { article, error });
+
+  if (error) {
+    console.error('[getArticle] Erro ao buscar artigo:', error);
+    return null;
+  }
+  
+  if (!article) {
+    console.log('[getArticle] Nenhum artigo encontrado para slug:', slug);
     return null;
   }
 
+  console.log('[getArticle] Artigo encontrado:', article.title_pt);
   return article as Article;
 }
 
