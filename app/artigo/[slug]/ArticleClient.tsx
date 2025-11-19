@@ -82,7 +82,7 @@ export default function ArticleClient({ initialArticle }: ArticleClientProps) {
           )}
 
           <div className="prose prose-lg max-w-none dark:prose-invert">
-            <RichContent content={content || ''} />
+            <RichContent content={content || ''} isHtml={true} />
           </div>
         </article>
 
