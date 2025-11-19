@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { createClient } from "@/integrations/supabase/client";
+import { createClient } from "@/integrations/supabase/server";
 import ArticleClient from "./ArticleClient";
 
 interface ArticlePageProps {
@@ -23,7 +23,7 @@ interface Article {
 }
 
 async function getArticle(slug: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   console.log('[getArticle] Buscando artigo com slug:', slug);
   
@@ -55,7 +55,8 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-  const article = await getArticle(params.slug);
+  const resolvedParams = await params;
+  const article = await getArticle(resolvedParams.slug);
 
   if (!article) {
     return {
@@ -74,7 +75,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       title,
       description,
       type: "article",
-      url: `https://angonurse.vercel.app/artigo/${params.slug}`,
+      url: `https://angonurse.vercel.app/artigo/${resolvedParams.slug}`,
       images: [
         {
           url: image,
@@ -97,7 +98,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  const article = await getArticle(params.slug);
+  const resolvedParams = await params;
+  const article = await getArticle(resolvedParams.slug);
 
   if (!article) {
     notFound();
