@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Categories from "@/components/Categories";
 import FeaturedArticles from "@/components/FeaturedArticles";
 import RecentArticles from "@/components/RecentArticles";
 import Newsletter from "@/components/Newsletter";
@@ -12,7 +11,6 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <Categories />
         <FeaturedArticles />
         <RecentArticles />
         <Newsletter />
